@@ -26,6 +26,10 @@ Overview:
   - Behaviour:
     - Wandering - main state of dog around scene
     - Commanded by player - player will have option of different commands which will dictate the sheepdog's movement
+      - "Come By" - move clockwise around flock
+      - "Away" - move anticlockwise around flock
+      - "Sit" - stop moving
+      - "Walk up" - walk towards flock
     - Sleeping - if not interacted with by player for certain time, while sleep somewhere in scene
   - Implementation: Needs researching
 - Bird:
@@ -63,6 +67,15 @@ References to Sources Used
 
 Assets:
 
+- [Sheep Models (not animated)](https://hattylaird.itch.io/silly-sheep-set) -License free to use
+- [Grass Texture](https://www.magnific.com/free-vector/green-abstract-shapes-pattern_852278.htm#fromView=keyword&page=1&position=4&uuid=144e49d5-8826-40c7-b455-ae5671cbead4&track=ais_hybrid&query=Cartoon+grass+texture) - Designed by Dotstudio / Freepik (free to use for commercial use)
+- [First Person Character Controller](https://assetstore.unity.com/packages/p/first-person-third-person-character-controllers-196526) by unity Technologies
+
 Tutorials:
 
 Research:
+
+- Banham Sheepdogs
+  - [Sheepdog Commands & Tools](https://www.banhamsheepdogs.co.uk/sheepdog-commands-tools/)
+  - [Livestock Behaviour & Safety](https://www.banhamsheepdogs.co.uk/livestock-behaviour-and-safety/)
+- [Sheep101](https://www.sheep101.info/flocking.html)
