@@ -8,34 +8,50 @@ public class Dog : MonoBehaviour
     public float distanceBehindPlayer;
     public float rotationSpeed;
     public float speed;
+
+    private float lastCommandTime = 0.0f;
+    private float idleTimeUntilSleep = 10.0f;
+    private void Awake()
+    {
+        UpdateState(DogState.FOLLOWING);
+    }
     void Update()
     {
         switch (state)
         {
             case DogState.WANDERING:
+                CheckIfShouldSleep();
                 Wander();
                 break;
             case DogState.FOLLOWING:
+                CheckIfShouldSleep();
                 FollowPlayer();
                 break;
             case DogState.SLEEPING:
                 Sleep();
                 break;
             case DogState.SIT:
+                CheckIfShouldSleep();
                 Sit();
                 break;
             case DogState.WALK_UP:
+                WalkUp();
                 break;
             case DogState.COME_BY:
+                ComeBy();
                 break;
             case DogState.AWAY:
-                break;
-            case DogState.NUM_OF_STATES:
+                Away();
                 break;
             default:
                 break;
         }
-        FollowPlayer();
+        
+    }
+    public void UpdateState(DogState _state)
+    {
+        Debug.Log($"State changes from {state} to {_state}");
+        state = _state;
     }
 
     public Quaternion CalculateAngleToPlayer()
@@ -92,6 +108,38 @@ public class Dog : MonoBehaviour
     public void Away()
     {
         // TO DO: Implement away behaviour
+    }
+    public void UpdateCommandTime()
+    {
+        lastCommandTime = Time.time;
+    }
+    public void CheckIfShouldSleep()
+    {
+        if (Time.time - lastCommandTime > idleTimeUntilSleep)
+        {
+            UpdateState(DogState.SLEEPING);
+        }
+    }
+
+    public void OnComeBy()
+    {
+        UpdateCommandTime();
+        UpdateState(DogState.COME_BY);
+    }
+    public void OnAway()
+    {
+        UpdateCommandTime();
+        UpdateState(DogState.AWAY);
+    }
+    public void OnWalkUp()
+    {
+        UpdateCommandTime();
+        UpdateState(DogState.WALK_UP);
+    }
+    public void OnSit()
+    {
+        UpdateCommandTime();
+        UpdateState(DogState.SIT);
     }
 
 }

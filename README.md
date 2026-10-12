@@ -70,6 +70,8 @@ Assets:
 - [Sheep Models (not animated)](https://hattylaird.itch.io/silly-sheep-set) -License free to use
 - [Grass Texture](https://www.magnific.com/free-vector/green-abstract-shapes-pattern_852278.htm#fromView=keyword&page=1&position=4&uuid=144e49d5-8826-40c7-b455-ae5671cbead4&track=ais_hybrid&query=Cartoon+grass+texture) - Designed by Dotstudio / Freepik (free to use for commercial use)
 - [First Person Character Controller](https://assetstore.unity.com/packages/p/first-person-third-person-character-controllers-196526) by unity Technologies
+- [Icons](https://kenney.nl/assets/game-icons)
+- 
 
 Tutorials:
 
