@@ -124,7 +124,7 @@ public class Dog : MonoBehaviour
     }
     public void CheckForCommands()
     {
-        Debug.Log($"Sit: {PlayerCommands.SitCommandGiven}, Walk: {PlayerCommands.WalkUpCommandGiven}, Come By: {PlayerCommands.ComeByCommandGiven}, Away: {PlayerCommands.AwayCommandGiven}");
+        //Debug.Log($"Sit: {PlayerCommands.SitCommandGiven}, Walk: {PlayerCommands.WalkUpCommandGiven}, Come By: {PlayerCommands.ComeByCommandGiven}, Away: {PlayerCommands.AwayCommandGiven}");
         if (PlayerCommands.SitCommandGiven)
             OnSit();
         else if (PlayerCommands.WalkUpCommandGiven)
