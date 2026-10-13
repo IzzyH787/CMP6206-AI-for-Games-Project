@@ -1,5 +1,5 @@
-using JetBrains.Annotations;
-using Unity.VisualScripting;
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 [ExecuteInEditMode]
@@ -14,11 +14,15 @@ public class AISensor : MonoBehaviour
     [SerializeField] private int scanFrequency = 30;
     [SerializeField] private LayerMask layers;
 
+    [SerializeField] private List<GameObject> ObjectsInSight = new List<GameObject>();
+
     Collider[] colliders = new Collider[50];
     Mesh mesh;
     int count;
     float scanInterval;
     float scanTimer;
+
+
 
     public void Start()
     {
@@ -37,8 +41,35 @@ public class AISensor : MonoBehaviour
     public void Scan()
     {
         count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
-    }
 
+        ObjectsInSight.Clear(); // Empty out list of previously detected objects
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = colliders[i].gameObject;
+            if (IsInSight(obj))
+            {
+                ObjectsInSight.Add(obj);
+            }
+        }
+    }
+    public bool IsInSight(GameObject obj)
+    {
+        Vector3 origin = transform.position;
+        Vector3 dest = obj.transform.position;
+        Vector3 direction = dest - origin;
+
+        // Check if object is within height of FOV
+        if (direction.y < 0 || direction.y > height)
+            return false;
+
+        // Check if object is within angle of cone of vision
+        direction.y = 0; // Ensures than angle calculations will be horizontal
+        float deltaAngle = Vector3.Angle(direction, transform.forward); 
+        if (deltaAngle > angle)
+            return false;
+
+        return true;
+    }
     Mesh CreateWedgeMEesh()
     {
         Mesh mesh = new Mesh();
@@ -141,9 +172,10 @@ public class AISensor : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, distance);
 
         // Draw spheres where all detected collisions are
-        for (int i = 0; i < count; i++)
+        Gizmos.color = Color.green;
+        foreach (GameObject obj in ObjectsInSight)
         {
-            Gizmos.DrawSphere(colliders[i].transform.position, 0.7f);
+            Gizmos.DrawWireSphere(obj.transform.position, 0.7f);
         }
     }
 }
