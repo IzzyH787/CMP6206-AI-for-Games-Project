@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class AISensor : MonoBehaviour
@@ -5,6 +6,7 @@ public class AISensor : MonoBehaviour
     [SerializeField] private float distance = 10;
     [SerializeField] private float angle = 30;
     [SerializeField] private float height = 1.0f;
+    [SerializeField] private int segments = 10;
     [SerializeField] private Color color = Color.red;
 
     Mesh mesh;
@@ -13,7 +15,8 @@ public class AISensor : MonoBehaviour
     {
         Mesh mesh = new Mesh();
 
-        int numTriangles = 8;
+        // Each segment has 4 triangles, top also has 2, bottom also has 2
+        int numTriangles = (segments * 4) + 2 + 2;
         int numVertices = numTriangles * 3;
 
         Vector3[] vertices = new Vector3[numVertices];
@@ -47,24 +50,39 @@ public class AISensor : MonoBehaviour
         vertices[vert++] = bottomRight;
         vertices[vert++] = bottomCenter;
 
-        // Far side
-        vertices[vert++] = bottomLeft;
-        vertices[vert++] = bottomRight;
-        vertices[vert++] = topRight;
+        float currentAngle = -angle;
+        float deltaAngle = (angle * 2) / segments;
+        for (int i = 0; i < segments; i++)
+        {
+            // Calculate vertices for each segment - centres never change
+            bottomLeft = Quaternion.Euler(0, currentAngle, 0) * Vector3.forward * distance;
+            bottomRight = Quaternion.Euler(0, currentAngle + deltaAngle, 0) * Vector3.forward * distance;
 
-        vertices[vert++] = topRight;
-        vertices[vert++] = topLeft;
-        vertices[vert++] = bottomLeft;
+            topRight = bottomRight + Vector3.up * height;
+            topLeft = bottomLeft + Vector3.up * height;
 
-        // Top
-        vertices[vert++] = topCenter;
-        vertices[vert++] = topLeft;
-        vertices[vert++] = topRight;
+            // Far side
+            vertices[vert++] = bottomLeft;
+            vertices[vert++] = bottomRight;
+            vertices[vert++] = topRight;
 
-        // Bottom
-        vertices[vert++] = bottomCenter;
-        vertices[vert++] = bottomRight;
-        vertices[vert++] = bottomLeft; // Opposite order so normals point outward from mesh
+            vertices[vert++] = topRight;
+            vertices[vert++] = topLeft;
+            vertices[vert++] = bottomLeft;
+
+            // Top
+            vertices[vert++] = topCenter;
+            vertices[vert++] = topLeft;
+            vertices[vert++] = topRight;
+
+            // Bottom
+            vertices[vert++] = bottomCenter;
+            vertices[vert++] = bottomRight;
+            vertices[vert++] = bottomLeft; // Opposite order so normals point outward from mesh
+
+            currentAngle += deltaAngle;
+        }
+
 
 
         for (int i = 0; i < numVertices; i++)
