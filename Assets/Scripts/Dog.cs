@@ -55,30 +55,15 @@ public class Dog : MonoBehaviour
         Debug.Log($"State changes from {state} to {_state}");
         state = _state;
     }
-
-    public Quaternion CalculateAngleToObject(Vector3 _pos)
-    {
-        //return Vector3.SignedAngle(gameObject.transform.forward, CalculateDirectionToPlayer(), Vector3.up);
-        return Quaternion.LookRotation(CalculateDirectionToObject(_pos));
-    }
-    public float CalculateDistanceToObject(Vector3 _pos)
-    {
-        return Vector3.Distance(gameObject.transform.position, _pos);
-    }
-    public Vector3 CalculateDirectionToObject(Vector3 _pos)
-    {
-        return (_pos - gameObject.transform.position).normalized;
-    }
-
     public void FollowPlayer()
     { 
         // Move towards player if far enough away
-        if (CalculateDistanceToObject(Player.Instance.transform.position) > distanceBehindPlayer)
+        if (Utilities.CalculateDistanceToObject(gameObject, Player.Instance.transform.position) > distanceBehindPlayer)
         {
             // Rotate towards player
 
             gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation,
-                CalculateAngleToObject(Player.Instance.transform.position),
+                Utilities.CalculateAngleToObject(gameObject, Player.Instance.transform.position),
                 rotationSpeed * Time.deltaTime);
 
             // Move towards player
