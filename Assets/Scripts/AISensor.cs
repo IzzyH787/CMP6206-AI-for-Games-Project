@@ -1,6 +1,8 @@
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class AISensor : MonoBehaviour
 {
     [SerializeField] private float distance = 10;
@@ -9,7 +11,33 @@ public class AISensor : MonoBehaviour
     [SerializeField] private int segments = 10;
     [SerializeField] private Color color = Color.red;
 
+    [SerializeField] private int scanFrequency = 30;
+    [SerializeField] private LayerMask layers;
+
+    Collider[] colliders = new Collider[50];
     Mesh mesh;
+    int count;
+    float scanInterval;
+    float scanTimer;
+
+    public void Start()
+    {
+        scanInterval = 1.0f / scanFrequency;
+    }
+    public void Update()
+    {
+        scanTimer -= Time.deltaTime;
+        if (scanTimer < 0)
+        {
+            scanTimer += scanInterval;
+            Scan();
+        }
+    }
+
+    public void Scan()
+    {
+        count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
+    }
 
     Mesh CreateWedgeMEesh()
     {
@@ -102,10 +130,20 @@ public class AISensor : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
+        // Draw gizmo of the FOV wedge
         if (mesh)
         {
             Gizmos.color = color;
             Gizmos.DrawMesh(mesh, transform.position, transform.rotation);
+        }
+
+        // Draw sphere around this game object
+        Gizmos.DrawWireSphere(transform.position, distance);
+
+        // Draw spheres where all detected collisions are
+        for (int i = 0; i < count; i++)
+        {
+            Gizmos.DrawSphere(colliders[i].transform.position, 0.7f);
         }
     }
 }
