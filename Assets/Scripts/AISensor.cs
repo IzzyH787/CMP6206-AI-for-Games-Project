@@ -13,6 +13,7 @@ public class AISensor : MonoBehaviour
 
     [SerializeField] private int scanFrequency = 30;
     [SerializeField] private LayerMask layers;
+    [SerializeField] private LayerMask occlusionLayers; // Layers for objects that block vision
 
     [SerializeField] private List<GameObject> ObjectsInSight = new List<GameObject>();
 
@@ -66,6 +67,12 @@ public class AISensor : MonoBehaviour
         direction.y = 0; // Ensures than angle calculations will be horizontal
         float deltaAngle = Vector3.Angle(direction, transform.forward); 
         if (deltaAngle > angle)
+            return false;
+
+        // Check if any object obstructing view between 
+        origin.y += height / 2; // Enuring ray is cast from center of wedge
+        dest.y = origin.y;
+        if (Physics.Linecast(origin, dest, occlusionLayers))
             return false;
 
         return true;
