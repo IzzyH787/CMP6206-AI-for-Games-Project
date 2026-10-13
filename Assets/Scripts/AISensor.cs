@@ -15,7 +15,17 @@ public class AISensor : MonoBehaviour
     [SerializeField] private LayerMask layers;
     [SerializeField] private LayerMask occlusionLayers; // Layers for objects that block vision
 
-    [SerializeField] private List<GameObject> ObjectsInSight = new List<GameObject>();
+    [SerializeField] private List<GameObject> objectsInSight = new List<GameObject>();
+
+    // Publically accessible version of list that removes any null objects before accessing
+    public List<GameObject> ObjectsInSight
+    {
+        get 
+        {
+            objectsInSight.RemoveAll(obj => !obj);
+            return objectsInSight;
+        }
+    }
 
     Collider[] colliders = new Collider[50];
     Mesh mesh;
@@ -43,13 +53,13 @@ public class AISensor : MonoBehaviour
     {
         count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
 
-        ObjectsInSight.Clear(); // Empty out list of previously detected objects
+        objectsInSight.Clear(); // Empty out list of previously detected objects
         for (int i = 0; i < count; i++)
         {
             GameObject obj = colliders[i].gameObject;
             if (IsInSight(obj))
             {
-                ObjectsInSight.Add(obj);
+                objectsInSight.Add(obj);
             }
         }
     }
