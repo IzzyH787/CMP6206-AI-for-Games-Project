@@ -17,6 +17,8 @@ public class Dog : MonoBehaviour
     }
     void Update()
     {
+        CheckForCommands();
+
         switch (state)
         {
             case DogState.WANDERING:
@@ -120,7 +122,18 @@ public class Dog : MonoBehaviour
             UpdateState(DogState.SLEEPING);
         }
     }
-
+    public void CheckForCommands()
+    {
+        Debug.Log($"Sit: {PlayerCommands.SitCommandGiven}, Walk: {PlayerCommands.WalkUpCommandGiven}, Come By: {PlayerCommands.ComeByCommandGiven}, Away: {PlayerCommands.AwayCommandGiven}");
+        if (PlayerCommands.SitCommandGiven)
+            OnSit();
+        else if (PlayerCommands.WalkUpCommandGiven)
+            OnWalkUp();
+        else if (PlayerCommands.ComeByCommandGiven)
+            OnComeBy();
+        else if (PlayerCommands.AwayCommandGiven)
+            OnAway();
+    }
     public void OnComeBy()
     {
         UpdateCommandTime();

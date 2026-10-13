@@ -516,7 +516,7 @@
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Sit",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -549,7 +549,7 @@
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Walk Up",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -560,7 +560,7 @@
                     "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Come By",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -582,7 +582,7 @@
                     "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Away",
                     "isComposite": false,
                     "isPartOfComposite": false
