@@ -56,29 +56,29 @@ public class Dog : MonoBehaviour
         state = _state;
     }
 
-    public Quaternion CalculateAngleToPlayer()
+    public Quaternion CalculateAngleToObject(Vector3 _pos)
     {
         //return Vector3.SignedAngle(gameObject.transform.forward, CalculateDirectionToPlayer(), Vector3.up);
-        return Quaternion.LookRotation(CalculateDirectionToPlayer());
+        return Quaternion.LookRotation(CalculateDirectionToObject(_pos));
     }
-    public float CalculateDistanceToPlayer()
+    public float CalculateDistanceToObject(Vector3 _pos)
     {
-        return Vector3.Distance(gameObject.transform.position, Player.Instance.gameObject.transform.position);
+        return Vector3.Distance(gameObject.transform.position, _pos);
     }
-    public Vector3 CalculateDirectionToPlayer()
+    public Vector3 CalculateDirectionToObject(Vector3 _pos)
     {
-        return (Player.Instance.gameObject.transform.position - gameObject.transform.position).normalized;
+        return (_pos - gameObject.transform.position).normalized;
     }
 
     public void FollowPlayer()
     { 
         // Move towards player if far enough away
-        if (CalculateDistanceToPlayer() > distanceBehindPlayer)
+        if (CalculateDistanceToObject(Player.Instance.transform.position) > distanceBehindPlayer)
         {
             // Rotate towards player
 
             gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation,
-                CalculateAngleToPlayer(),
+                CalculateAngleToObject(Player.Instance.transform.position),
                 rotationSpeed * Time.deltaTime);
 
             // Move towards player
@@ -86,9 +86,29 @@ public class Dog : MonoBehaviour
         }
     }
 
+    public void Follow(Vector3 _position)
+    {
+        // Rotate towards position
+        gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation,
+            Quaternion.LookRotation(_position - transform.position),
+            rotationSpeed * Time.deltaTime);
+
+        // Move towards player
+        gameObject.transform.position += transform.forward * speed * Time.deltaTime;
+    }
     public void Wander()
     {
-        // TO DO: Implement wandering behaviour: Pick random point move to it & repeat
+        
+    }
+    public Vector3 PickRandomPoint()
+    {
+        Vector3 minBound = WorldBounds.Instance.MinBound.position;
+        Vector3 maxBound = WorldBounds.Instance.MaxBound.position;
+
+        return new Vector3(
+            Random.Range(minBound.x, maxBound.x),
+            Random.Range(minBound.y, maxBound.y),
+            Random.Range(minBound.z, maxBound.z));
     }
 
     public void Sleep()
