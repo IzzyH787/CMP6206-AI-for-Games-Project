@@ -10,10 +10,13 @@ public class Dog : MonoBehaviour
     public float speed;
 
     private float lastCommandTime = 0.0f;
-    private float idleTimeUntilSleep = 10.0f;
+    private float idleTimeUntilSleep = 1000.0f;
+
+    Vector3 wanderDestination;
+    public float distanceToDestinationThreshold;
     private void Awake()
     {
-        UpdateState(DogState.FOLLOWING);
+        UpdateState(DogState.WANDERING);
     }
     void Update()
     {
@@ -22,11 +25,11 @@ public class Dog : MonoBehaviour
         switch (state)
         {
             case DogState.WANDERING:
-                CheckIfShouldSleep();
+                //CheckIfShouldSleep();
                 Wander();
                 break;
             case DogState.FOLLOWING:
-                CheckIfShouldSleep();
+                //CheckIfShouldSleep();
                 FollowPlayer();
                 break;
             case DogState.SLEEPING:
@@ -48,7 +51,7 @@ public class Dog : MonoBehaviour
             default:
                 break;
         }
-        
+
     }
     public void UpdateState(DogState _state)
     {
@@ -56,7 +59,7 @@ public class Dog : MonoBehaviour
         state = _state;
     }
     public void FollowPlayer()
-    { 
+    {
         // Move towards player if far enough away
         if (Utilities.CalculateDistanceToObject(gameObject, Player.Instance.transform.position) > distanceBehindPlayer)
         {
@@ -83,7 +86,12 @@ public class Dog : MonoBehaviour
     }
     public void Wander()
     {
-        
+        // Check if new point need to be picked
+        if (wanderDestination == null || Utilities.CalculateDistanceToObject(gameObject, wanderDestination) < distanceToDestinationThreshold)
+        {
+            wanderDestination = PickRandomPoint();
+        }
+        Follow(wanderDestination);
     }
     public Vector3 PickRandomPoint()
     {
@@ -160,6 +168,11 @@ public class Dog : MonoBehaviour
         UpdateState(DogState.SIT);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(wanderDestination, 0.7f);
+    }
 }
 
 public enum DogState
