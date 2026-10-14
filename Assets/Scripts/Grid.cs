@@ -14,6 +14,14 @@ public class Grid : MonoBehaviour
 
     public List<Node> path;
 
+    public int MaxSize
+    {
+        get
+        {
+            return gridSizeX * gridSizeY;
+        }
+    }
+
     private void Start()
     {
         nodeDiameter = nodeRadius * 2;

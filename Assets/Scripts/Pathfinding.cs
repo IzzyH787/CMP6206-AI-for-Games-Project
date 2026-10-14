@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Transactions;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -21,27 +20,14 @@ public class Pathfinding : MonoBehaviour
         Node startNode = grid.NodeFromWorldPoint(_startPosition);
         Node targetNode = grid.NodeFromWorldPoint(_targetPosition);
 
-        List<Node> openSet = new List<Node>();
+        Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
         HashSet<Node> closedSet = new HashSet<Node>();
 
-        openSet.Add(startNode);
+        openSet.AddItem(startNode);
 
         while (openSet.Count > 0)
         {
-            Node currentNode = openSet[0]; // Current node is first in open set
-
-            // Get lowest cost node in open set (reachable nodes to check)
-            for (int i = 1; i < openSet.Count; i++)  // Start at because current node is 1
-            {
-                if (openSet[i].fCost < currentNode.fCost ||
-                    (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost))
-                {
-                    currentNode = openSet[i];
-                }
-            }
-
-            // Remove node from open set and add to closed set
-            openSet.Remove(currentNode);
+            Node currentNode = openSet.RemoveFirst();
             closedSet.Add(currentNode);
 
             if (currentNode == targetNode)
@@ -65,7 +51,7 @@ public class Pathfinding : MonoBehaviour
                     neighbour.parent = currentNode;
 
                     if (!openSet.Contains(neighbour)) // TO DO: Avoid repeated check
-                        openSet.Add(neighbour);
+                        openSet.AddItem(neighbour);
                 }
             }
         }

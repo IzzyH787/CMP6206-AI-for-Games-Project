@@ -14,7 +14,7 @@ public class Heap<T> where T : IHeapItem<T> // ensures T implements IHeapItem
     public void AddItem(T _item)
     {
         _item.HeapIndex = currentItemCount;
-        ietms[currentItemCount] = _item;
+        items[currentItemCount] = _item;
         SortUp(_item);
         currentItemCount++;
     }
@@ -73,7 +73,7 @@ public class Heap<T> where T : IHeapItem<T> // ensures T implements IHeapItem
                 }
 
                 // Found child for swap check, now check if swap needed
-                if (items.CompareTo(items[swapIndex]) < 0)
+                if (_item.CompareTo(items[swapIndex]) < 0)
                     Swap(_item, items[swapIndex]);
                 else // Has higher priority than child so should remain 
                     return;
@@ -92,9 +92,9 @@ public class Heap<T> where T : IHeapItem<T> // ensures T implements IHeapItem
         while (true)
         {
             T parentItem = items[parentIndex];
-            if (item.CompareTo(parentItem) > 0) // Higher priority returns 1, same returns 0, lower returns - 1
+            if (_item.CompareTo(parentItem) > 0) // Higher priority returns 1, same returns 0, lower returns - 1
             {
-                Swap(items, parentItem);
+                Swap(_item, parentItem);
             }
             else // Not higher priority than parent
                 break; // Stop going up loop checking for swaps
@@ -115,7 +115,7 @@ public class Heap<T> where T : IHeapItem<T> // ensures T implements IHeapItem
     }
 }
 
-public interface IHeapItem<T>: IComparable<T>
+public interface IHeapItem<T> : IComparable<T>
 {
     int HeapIndex
     {
