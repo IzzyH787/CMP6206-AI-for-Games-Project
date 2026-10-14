@@ -1,6 +1,5 @@
 using UnityEngine;
-using UnityEngine.Splines;
-
+using System.Collections.Generic;
 public class Grid : MonoBehaviour
 {
     public Transform Player;
@@ -12,6 +11,8 @@ public class Grid : MonoBehaviour
 
     float nodeDiameter;
     int gridSizeX, gridSizeY;
+
+    public List<Node> path;
 
     private void Start()
     {
@@ -30,7 +31,7 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + (Vector3.right * (x * nodeDiameter + nodeRadius) + (Vector3.forward * (y * nodeDiameter + nodeRadius)));
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
-                grid[x, y] = new Node(walkable, worldPoint);
+                grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
     }
 
@@ -45,6 +46,29 @@ public class Grid : MonoBehaviour
 
         return grid[x, y];
     }
+
+    public List<Node> GetNeighbours(Node _node)
+    {
+        List<Node> neighbours = new List<Node>();
+
+        for (int x = -1; x <= 1; x++)
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                    continue; // Skip as this is the node we are looking for neighbours for
+
+                // Get coords of node to check for if neighbour
+                int checkX = _node.gridX + x;
+                int checkY = _node.gridY + y;
+
+                if (checkX >= 0 && checkX <  gridSizeX && checkY >= 0 && checkY < gridSizeY)
+                {
+                    neighbours.Add(grid[checkX, checkY]);
+                }
+            }
+
+        return neighbours;
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
@@ -55,6 +79,10 @@ public class Grid : MonoBehaviour
             foreach (Node node in grid)
             {
                 Gizmos.color = node.isWalkable ? Color.white : Color.red;
+
+                // Draw path between objects
+                if (path != null && path.Contains(node))
+                    Gizmos.color = Color.black;
                 // Special color for node with player
                 if (playerNode == node)
                     Gizmos.color = Color.cyan;
