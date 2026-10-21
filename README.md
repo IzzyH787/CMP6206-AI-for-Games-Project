@@ -2,8 +2,9 @@
 
 Project Name: Farming Simulator
 
-Overview:
-    A farm scene where the player can interact with growing plants and animals that each have different behaviours and can interact with each other.
+## Overview
+
+A farm scene where the player can interact with growing plants and animals that each have different behaviours and can interact with each other.
 
 - Sheep:
   - Behaviour:
@@ -60,24 +61,25 @@ Overview:
 
 ![Crop State Plan](Docs/crop-states.jpg)
 
-Target Game Engine
+## Target Game Engine
 
 Unity (appropriate .gitignore included)
 
-Research - background to the project such as inspiration and what you need to find out to achieve the AI features.  If real behaviour is to be implemented then examples such as flocking or using Artificial Life (ALife) approaches such as cellular automata should be used to support your project and provide a means of comparison of how successful your implementation is.
+## Research
 
-Methodology / Planning:
+## Methodology / Planning
 
-Development:
+### Development
+
 This project's timeline is being planned across two Kanban boards. I am using one in Notion to track for generic topics listed in the assessment brief that I want to look into throughout the semester. I am then also using a Github Project board for more detailed breakdowns of features I have decided and planned to work on following the general topics set out in my Notion board. This will define specifics for the implementations of features and the timeline in which I expect to complete them within.
 
-Quality Assurance:
+### Quality Assurance
 
-Progress Documentation
+### Progress Documentation
 
 This will be documented in my Github commits to track what was completed in each commit, anycurrent issues with the implementation and what date this was completed on. My Github project board will also be updated with the progress from these commmits and if any features are completed before/after the expected time in the initial plan.
 
-References to Sources Used
+## References
 
 Assets:
 
@@ -89,6 +91,8 @@ Assets:
 Tutorials:
 
 - [Line of Sight](https://www.youtube.com/watch?v=znZXmmyBF-o&themeRefresh=1)
+- [A* Pathfinding Series](https://www.youtube.com/watch?v=3Dw5d7PlcTM)
+- [Unity NavMesh Series](https://www.youtube.com/watch?v=SMWxCpLvrcc&list=PLX2vGYjWbI0SsXFD1Gjo-8kFEpzk5k4Kh&index=1)
 
 Research:
 
