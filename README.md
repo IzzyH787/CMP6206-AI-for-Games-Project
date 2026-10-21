@@ -14,6 +14,9 @@ Overview:
     - Dying - response ot being attacked by wolf
     - Guided - movement dictated by interaction with sheepog
   - Implementation method: Needs researching
+
+![Sheep State Plan](Docs/sheep-states.jpg)
+
 - Wolves:
   - Behaviour:
     - Pack moving - main state of wolves around scene
@@ -22,6 +25,9 @@ Overview:
     - Eating - when in range of dead sheep
     - Fleeing - if in range of player while holding gun
   - Implementation method: Needs researching
+
+![Wolf State Plan](Docs/wolf-states.jpg)
+
 - Sheepdog:
   - Behaviour:
     - Wandering - main state of dog around scene
@@ -32,6 +38,9 @@ Overview:
       - "Walk up" - walk towards flock
     - Sleeping - if not interacted with by player for certain time, while sleep somewhere in scene
   - Implementation: Needs researching
+
+![Sheepdog State Plan](Docs/dog-states.jpg)
+
 - Bird:
   - Behaviour:
     - Flying in flock - main state of birds in scene
@@ -39,12 +48,17 @@ Overview:
     - Returning to sky: once bird completes eating acyion, hunger stat will be replenished and bird will return to the sky
     - Fleeing: if bird flies down to eat crops and is within range/ line of sight of scarecrow/player they will fly away
   - Implementation method: Needs researching
+
+![Bird State Plan](Docs/bird-states.jpg)
+
 - Crops:
   - Behaviour
     - Growing: main state of crops in state
     - Eaten: if crow successfully eats crop object, crop will lose height
     - Dying: if player has not watered crop for certain time, crop will enter dying state and start losing height
   - Implementation method: Needs researching
+
+![Crop State Plan](Docs/crop-states.jpg)
 
 Target Game Engine
 
