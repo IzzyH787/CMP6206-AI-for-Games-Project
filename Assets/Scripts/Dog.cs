@@ -75,7 +75,8 @@ public class Dog : MonoBehaviour
         if (!CanSeePlayer())
             return;
 
-
+        lastTimePlayerSeen = Time.time;
+        lastNodePlayerSeen = Grid.Instance.NodeFromGameObject(Player.Instance.gameObject);
     }
     private bool CanSeePlayer()
     {
@@ -89,7 +90,17 @@ public class Dog : MonoBehaviour
     }
     public void FollowPlayer()
     {
-        // Move towards player if far enough away
+        Debug.Log("Following player");
+        // Check if player is currently in line of sight
+        if (gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject, false))
+        {
+            Debug.Log("Can see player");
+        }
+        else
+            Debug.Log("Cant see player");
+
+
+        /*// Move towards player if far enough away
         if (Utilities.CalculateDistanceToObject(gameObject, Player.Instance.transform.position) > distanceBehindPlayer)
         {
             // Rotate towards player
@@ -100,28 +111,18 @@ public class Dog : MonoBehaviour
 
             // Move towards player
             gameObject.transform.position += transform.forward * speed * Time.deltaTime;
-        }
+        }*/
     }
 
     public void Follow(Vector3 _position)
     {
-        Debug.Log("Following player");
-        // Check if player is currently in line of sight
-        if (gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject))
-        {
-            Debug.Log("Can see player");
-        }
-        else
-            Debug.Log("Cant see player");
-
-
-        /*// Rotate towards position
+        // Rotate towards position
         gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation,
             Quaternion.LookRotation(_position - transform.position),
             rotationSpeed * Time.deltaTime);
 
         // Move towards player
-        gameObject.transform.position += transform.forward * speed * Time.deltaTime;*/
+        gameObject.transform.position += transform.forward * speed * Time.deltaTime;
     }
     public void Wander()
     {
@@ -210,6 +211,9 @@ public class Dog : MonoBehaviour
     }
     public void OnHere()
     {
+        lastHereCommandTime = Time.time;
+        lastHereCallNode = Grid.Instance.NodeFromGameObject(Player.Instance.gameObject);
+
         UpdateCommandTime();
         UpdateState(DogState.FOLLOWING);
     }

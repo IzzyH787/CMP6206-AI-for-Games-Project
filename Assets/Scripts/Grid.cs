@@ -60,6 +60,11 @@ public class Grid : MonoBehaviour
         return grid[x, y];
     }
 
+    public Node NodeFromGameObject(GameObject _obj)
+    {
+        return NodeFromWorldPoint(_obj.transform.position);
+    }
+
     public List<Node> GetNeighbours(Node _node)
     {
         List<Node> neighbours = new List<Node>();

@@ -5,12 +5,6 @@ public class Pathfinding : MonoBehaviour
 {
     public Transform seeker, target;
 
-    //Grid grid;
-    private void Awake()
-    {
-        //grid = GetComponent<Grid>();
-    }
-
     private void Update()
     {
         FindPath(seeker.position, target.position);

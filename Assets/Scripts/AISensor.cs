@@ -48,7 +48,6 @@ public class AISensor : MonoBehaviour
             Scan();
         }
     }
-
     public void Scan()
     {
         count = Physics.OverlapSphereNonAlloc(transform.position, distance, colliders, layers, QueryTriggerInteraction.Collide);
@@ -63,21 +62,32 @@ public class AISensor : MonoBehaviour
             }
         }
     }
-    public bool IsInSight(GameObject obj)
+
+
+    /// <summary>
+    /// Returns true if game object is in cone of vision
+    /// </summary>
+    /// <param name="_obj"></param>
+    /// <param name="_useAngle"> If false, angle of cone of vision is ignored</param>
+    /// <returns></returns>
+    public bool IsInSight(GameObject _obj, bool _useAngle = true)
     {
         Vector3 origin = transform.position;
-        Vector3 dest = obj.transform.position;
+        Vector3 dest = _obj.transform.position;
         Vector3 direction = dest - origin;
 
         // Check if object is within height of FOV
         if (direction.y < 0 || direction.y > height)
             return false;
 
-        // Check if object is within angle of cone of vision
-        direction.y = 0; // Ensures than angle calculations will be horizontal
-        float deltaAngle = Vector3.Angle(direction, transform.forward); 
-        if (deltaAngle > angle)
-            return false;
+        if (_useAngle)
+        {
+            // Check if object is within angle of cone of vision
+            direction.y = 0; // Ensures than angle calculations will be horizontal
+            float deltaAngle = Vector3.Angle(direction, transform.forward);
+            if (deltaAngle > angle)
+                return false;
+        }
 
         // Check if any object obstructing view between 
         origin.y += height / 2; // Enuring ray is cast from center of wedge
