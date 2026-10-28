@@ -3,11 +3,16 @@ using System.Collections.Generic;
 
 public class Pathfinding : MonoBehaviour
 {
-    public Transform seeker, target;
+    //public Transform seeker, target;
+    public List<Node> currentPathToFollow;
 
-    private void Update()
+    public void FindPathFromSelfToObject(GameObject _obj)
     {
-        FindPath(seeker.position, target.position);
+        FindPath(transform.position, _obj.transform.position);
+    }
+    public void FindPathFromSelfToPosition(Vector3 _pos)
+    {
+        FindPath(transform.position, _pos);
     }
     public void FindPath(Vector3 _startPosition, Vector3 _targetPosition)
     {
@@ -63,7 +68,7 @@ public class Pathfinding : MonoBehaviour
         }
 
         path.Reverse(); // Sorts list to be start -> end
-        Grid.Instance.path = path;
+        currentPathToFollow = path;
     }
     public int GetDistance(Node _nodeA, Node _nodeB)
     {

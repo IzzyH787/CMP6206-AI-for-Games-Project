@@ -1,19 +1,23 @@
+using System.IO;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Dog : MonoBehaviour
 {
     // Default facing +x axis 
     private DogState state;
+    Pathfinding pathfindingComponent;
 
-    public float distanceBehindPlayer;
-    public float rotationSpeed;
-    public float speed;
+    [SerializeField] private float distanceBehindPlayer = 2.0f;
+    [SerializeField] private float rotationSpeed = 2.0f;
+    [SerializeField] private float speed = 3.0f;
 
     private float lastCommandTime = 0.0f;
-    private float idleTimeUntilSleep = 1000.0f;
+    [SerializeField] private float commandDuration = 30.0f;
+    [SerializeField] private float idleTimeUntilSleep = 1000.0f;
 
     Vector3 wanderDestination;
-    public float distanceToDestinationThreshold;
+    [SerializeField] public float distanceToDestinationThreshold = 10.0f;
 
 
     // Used for pathfinding when following player
@@ -29,8 +33,14 @@ public class Dog : MonoBehaviour
 
     /// <summary> Stores node player was in when last in line of sight </summary>
     private Node lastHereCallNode;
+
+    bool isConfused;
+    [SerializeField] float timeConfusedUntilWander = 3.0f;
+    float timeGotConfused;
+
     private void Awake()
     {
+        pathfindingComponent = GetComponent<Pathfinding>();
         UpdateState(DogState.WANDERING);
     }
     void Update()
@@ -45,7 +55,7 @@ public class Dog : MonoBehaviour
                 Wander();
                 break;
             case DogState.FOLLOWING:
-                //CheckIfShouldSleep();
+                CheckIfShouldIdle();
                 FollowPlayer();
                 break;
             case DogState.SLEEPING:
@@ -80,7 +90,7 @@ public class Dog : MonoBehaviour
     }
     private bool CanSeePlayer()
     {
-        return gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject);
+        return gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject, false);
     }
 
     public void UpdateState(DogState _state)
@@ -90,28 +100,55 @@ public class Dog : MonoBehaviour
     }
     public void FollowPlayer()
     {
-        Debug.Log("Following player");
+        // Check if dog is already close enough to player
+        if (Utilities.CalculateDistanceToObject(gameObject, Player.Instance.gameObject) < distanceBehindPlayer)
+            return;
+
         // Check if player is currently in line of sight
         if (gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject, false))
         {
             Debug.Log("Can see player");
+            pathfindingComponent.FindPathFromSelfToObject(Player.Instance.gameObject);
         }
         else
-            Debug.Log("Cant see player");
-
-
-        /*// Move towards player if far enough away
-        if (Utilities.CalculateDistanceToObject(gameObject, Player.Instance.transform.position) > distanceBehindPlayer)
         {
-            // Rotate towards player
+            Debug.Log("Cant see player");
+            // Check if dog has seen player since command was given
+            if (lastHereCommandTime > lastTimePlayerSeen)
+            {
+                // If most recent was command, follow sound (location of player when command given)
+                pathfindingComponent.FindPathFromSelfToPosition(lastHereCallNode.worldPosition);
+            }
+            // If most recent was seeing player, follow last seen player location
+            else
+            {
+                // If already at last time seeing player, enter conufsed state
+                if (Grid.Instance.NodeFromGameObject(gameObject) == lastNodePlayerSeen && !isConfused)
+                {
+                    isConfused = true;
+                    timeGotConfused = Time.time;
+                }
 
-            gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation,
-                Utilities.CalculateAngleToObject(gameObject, Player.Instance.transform.position),
-                rotationSpeed * Time.deltaTime);
+                // If has been consufed for long enough return to wander state
+                if(Time.time - timeGotConfused >= timeConfusedUntilWander)
+                    UpdateState(DogState.WANDERING);
 
-            // Move towards player
-            gameObject.transform.position += transform.forward * speed * Time.deltaTime;
-        }*/
+                pathfindingComponent.FindPathFromSelfToPosition(lastNodePlayerSeen.worldPosition);
+            }
+        }
+
+        // Check path has been found
+        if (pathfindingComponent.currentPathToFollow.Count <= 0)
+            return; // No path found so skip tracking this frame
+
+        // Check if dog is currently on next node in path if so remove node
+        if (Grid.Instance.NodeFromGameObject(gameObject) == pathfindingComponent.currentPathToFollow[0])
+        {
+            pathfindingComponent.currentPathToFollow.RemoveAt(0);
+        }
+
+        // Navigate towrds next node
+        Follow(pathfindingComponent.currentPathToFollow[0].worldPosition);
     }
 
     public void Follow(Vector3 _position)
@@ -127,7 +164,7 @@ public class Dog : MonoBehaviour
     public void Wander()
     {
         // Check if new point need to be picked
-        if (wanderDestination == null || Utilities.CalculateDistanceToObject(gameObject, wanderDestination) < distanceToDestinationThreshold)
+        if (wanderDestination == null || Utilities.CalculateDistanceToPosition(gameObject, wanderDestination) < distanceToDestinationThreshold)
         {
             wanderDestination = PickRandomPoint();
         }
@@ -167,6 +204,14 @@ public class Dog : MonoBehaviour
     public void UpdateCommandTime()
     {
         lastCommandTime = Time.time;
+    }
+
+    public void CheckIfShouldIdle() 
+    { 
+        if (Time.time - lastCommandTime > commandDuration)
+        {
+            UpdateState(DogState.WANDERING);
+        }
     }
     public void CheckIfShouldSleep()
     {
@@ -222,6 +267,15 @@ public class Dog : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(wanderDestination, 0.7f);
+
+        if (Grid.Instance == null || pathfindingComponent.currentPathToFollow == null || pathfindingComponent.currentPathToFollow.Count <= 0)
+            return;
+
+        foreach (Node node in pathfindingComponent.currentPathToFollow)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawCube(node.worldPosition, Vector3.one * (Grid.Instance.nodeDiameter - 0.1f)); // Draws cubes for each node in grid (-.1 to give small gap in gizmos drawn
+        }
     }
 }
 

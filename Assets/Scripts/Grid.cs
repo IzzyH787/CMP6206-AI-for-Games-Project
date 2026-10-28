@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour
     public float nodeRadius;
     Node[,] grid;
 
-    float nodeDiameter;
+    public float nodeDiameter { get; private set; }
     int gridSizeX, gridSizeY;
 
     public List<Node> path;
@@ -50,7 +50,7 @@ public class Grid : MonoBehaviour
 
     public Node NodeFromWorldPoint(Vector3 _pos)
     {
-        // Clamped between 0 and 1 in case object is eve=r outside of grid then invalid node not generated
+        // Clamped between 0 and 1 in case object is ever outside of grid then invalid node not generated
         float percentX = Mathf.Clamp01((_pos.x + gridWorldSize.x / 2) / gridWorldSize.x); // Half width added as grid is centrred on (0,0) and this will then map left side of grid to be 0
         float percentY = Mathf.Clamp01((_pos.z + gridWorldSize.y / 2) / gridWorldSize.y); // Half height added as grid is centrred on (0,0) and this will then map bottom side of grid to be 0
 
@@ -98,14 +98,11 @@ public class Grid : MonoBehaviour
             {
                 Gizmos.color = node.isWalkable ? Color.white : Color.red;
 
-                // Draw path between objects
-                if (path != null && path.Contains(node))
-                    Gizmos.color = Color.black;
                 // Special color for node with player
                 if (playerNode == node)
                     Gizmos.color = Color.cyan;
 
-                Gizmos.DrawCube(node.worldPosition, Vector3.one * (nodeDiameter - 0.1f)); // Draws cubes for each node in grid (-.1 to give small gap in gizmos drawn
+                Gizmos.DrawCube(node.worldPosition, Vector3.one * (nodeDiameter - 0.4f)); // Draws cubes for each node in grid (-.4 to give larger gap in gizmos drawn)
             }
         }
     }
