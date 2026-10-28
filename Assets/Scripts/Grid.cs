@@ -9,6 +9,7 @@ public class Grid : MonoBehaviour
     public Vector2 gridWorldSize;
     public float nodeRadius;
     Node[,] grid;
+    public List<Node> walkableNodes {get; private set;}
 
     public float nodeDiameter { get; private set; }
     int gridSizeX, gridSizeY;
@@ -36,6 +37,12 @@ public class Grid : MonoBehaviour
     }
     public void CreateGrid()
     {
+        //Create list if null
+        if (walkableNodes == null)
+        {
+            walkableNodes = new List<Node>();
+        }
+
         grid = new Node[gridSizeX, gridSizeY];
         Vector3 worldBottomLeft = transform.position - (Vector3.right * gridWorldSize.x / 2) - (Vector3.forward * gridWorldSize.y / 2);
 
@@ -45,6 +52,10 @@ public class Grid : MonoBehaviour
                 Vector3 worldPoint = worldBottomLeft + (Vector3.right * (x * nodeDiameter + nodeRadius) + (Vector3.forward * (y * nodeDiameter + nodeRadius)));
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
                 grid[x, y] = new Node(walkable, worldPoint, x, y);
+
+                // Create list of walkable nodes
+                if (walkable)
+                    walkableNodes.Add(new Node(walkable, worldPoint, x, y));
             }
     }
 

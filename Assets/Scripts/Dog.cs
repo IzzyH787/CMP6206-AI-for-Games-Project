@@ -137,18 +137,7 @@ public class Dog : MonoBehaviour
             }
         }
 
-        // Check path has been found
-        if (pathfindingComponent.currentPathToFollow.Count <= 0)
-            return; // No path found so skip tracking this frame
-
-        // Check if dog is currently on next node in path if so remove node
-        if (Grid.Instance.NodeFromGameObject(gameObject) == pathfindingComponent.currentPathToFollow[0])
-        {
-            pathfindingComponent.currentPathToFollow.RemoveAt(0);
-        }
-
-        // Navigate towrds next node
-        Follow(pathfindingComponent.currentPathToFollow[0].worldPosition);
+        Pathfind();
     }
 
     public void Follow(Vector3 _position)
@@ -166,21 +155,29 @@ public class Dog : MonoBehaviour
         // Check if new point need to be picked
         if (wanderDestination == null || Utilities.CalculateDistanceToPosition(gameObject, wanderDestination) < distanceToDestinationThreshold)
         {
-            wanderDestination = PickRandomPoint();
+            wanderDestination = Utilities.RandomWalkablePosition();
         }
-        Follow(wanderDestination);
+
+        // A* to position
+        pathfindingComponent.FindPathFromSelfToPosition(wanderDestination);
+        Pathfind();
     }
-    public Vector3 PickRandomPoint()
+
+    public void Pathfind()
     {
-        Vector3 minBound = WorldBounds.Instance.MinBound.position;
-        Vector3 maxBound = WorldBounds.Instance.MaxBound.position;
+        // Check path has been found
+        if (pathfindingComponent.currentPathToFollow.Count <= 0)
+            return; // No path found so skip tracking this frame
 
-        return new Vector3(
-            Random.Range(minBound.x, maxBound.x),
-            Random.Range(minBound.y, maxBound.y),
-            Random.Range(minBound.z, maxBound.z));
+        // Check if dog is currently on next node in path if so remove node
+        if (Grid.Instance.NodeFromGameObject(gameObject) == pathfindingComponent.currentPathToFollow[0])
+        {
+            pathfindingComponent.currentPathToFollow.RemoveAt(0);
+        }
+
+        // Navigate towrds next node
+        Follow(pathfindingComponent.currentPathToFollow[0].worldPosition);
     }
-
     public void Sleep()
     {
         // TO DO: Implement sleep behaviour
