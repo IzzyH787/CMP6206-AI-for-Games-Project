@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 public class Grid : MonoBehaviour
 {
+    public static Grid Instance; 
     public Transform Player;
 
     public LayerMask unwalkableMask;
@@ -20,6 +21,10 @@ public class Grid : MonoBehaviour
         {
             return gridSizeX * gridSizeY;
         }
+    }
+    private void Awake()
+    {
+        Instance = this;
     }
 
     private void Start()

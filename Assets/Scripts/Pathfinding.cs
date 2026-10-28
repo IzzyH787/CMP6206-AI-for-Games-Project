@@ -5,10 +5,10 @@ public class Pathfinding : MonoBehaviour
 {
     public Transform seeker, target;
 
-    Grid grid;
+    //Grid grid;
     private void Awake()
     {
-        grid = GetComponent<Grid>();
+        //grid = GetComponent<Grid>();
     }
 
     private void Update()
@@ -17,10 +17,10 @@ public class Pathfinding : MonoBehaviour
     }
     public void FindPath(Vector3 _startPosition, Vector3 _targetPosition)
     {
-        Node startNode = grid.NodeFromWorldPoint(_startPosition);
-        Node targetNode = grid.NodeFromWorldPoint(_targetPosition);
+        Node startNode = Grid.Instance.NodeFromWorldPoint(_startPosition);
+        Node targetNode = Grid.Instance.NodeFromWorldPoint(_targetPosition);
 
-        Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
+        Heap<Node> openSet = new Heap<Node>(Grid.Instance.MaxSize);
         HashSet<Node> closedSet = new HashSet<Node>();
 
         openSet.AddItem(startNode);
@@ -36,7 +36,7 @@ public class Pathfinding : MonoBehaviour
                 return; // Exit out as found path to node
             }
 
-            foreach (Node neighbour in grid.GetNeighbours(currentNode))
+            foreach (Node neighbour in Grid.Instance.GetNeighbours(currentNode))
             {
                 if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                     continue; // Skip node if not waklable or already been checked
@@ -69,7 +69,7 @@ public class Pathfinding : MonoBehaviour
         }
 
         path.Reverse(); // Sorts list to be start -> end
-        grid.path = path;
+        Grid.Instance.path = path;
     }
     public int GetDistance(Node _nodeA, Node _nodeB)
     {

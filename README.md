@@ -81,20 +81,20 @@ This will be documented in my Github commits to track what was completed in each
 
 ## References
 
-Assets:
+### Assets
 
 - [Sheep Models (not animated)](https://hattylaird.itch.io/silly-sheep-set) -License free to use
 - [Grass Texture](https://www.magnific.com/free-vector/green-abstract-shapes-pattern_852278.htm#fromView=keyword&page=1&position=4&uuid=144e49d5-8826-40c7-b455-ae5671cbead4&track=ais_hybrid&query=Cartoon+grass+texture) - Designed by Dotstudio / Freepik (free to use for commercial use)
 - [First Person Character Controller](https://assetstore.unity.com/packages/p/first-person-third-person-character-controllers-196526) by unity Technologies
 - [Icons](https://kenney.nl/assets/game-icons)
 
-Tutorials:
+### Tutorials
 
 - [Line of Sight](https://www.youtube.com/watch?v=znZXmmyBF-o&themeRefresh=1)
 - [A* Pathfinding Series](https://www.youtube.com/watch?v=3Dw5d7PlcTM)
 - [Unity NavMesh Series](https://www.youtube.com/watch?v=SMWxCpLvrcc&list=PLX2vGYjWbI0SsXFD1Gjo-8kFEpzk5k4Kh&index=1)
 
-Research:
+### Research Resources
 
 - Banham Sheepdogs
   - [Sheepdog Commands & Tools](https://www.banhamsheepdogs.co.uk/sheepdog-commands-tools/)

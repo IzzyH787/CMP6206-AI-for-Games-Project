@@ -6,6 +6,7 @@ public class PlayerCommands : MonoBehaviour
     static private InputAction walkUpAction;
     static private InputAction comeByAction;
     static private InputAction awayAction;
+    static private InputAction hereAction;
 
     // Runs when enterring run time
     [RuntimeInitializeOnLoadMethod]
@@ -19,6 +20,8 @@ public class PlayerCommands : MonoBehaviour
         comeByAction?.Enable(); // might return null if name ever changed
         awayAction = InputSystem.actions.FindAction("Away");
         awayAction?.Enable(); // might return null if name ever changed
+        hereAction = InputSystem.actions.FindAction("Here");
+        hereAction?.Enable(); // might return null if name ever changed
     }
     public static bool SitCommandGiven
     {
@@ -46,6 +49,13 @@ public class PlayerCommands : MonoBehaviour
         get
         {
             return awayAction.WasPressedThisFrame();
+        }
+    }
+    public static bool HereCommandGiven
+    {
+        get
+        {
+            return hereAction.WasPressedThisFrame();
         }
     }
 

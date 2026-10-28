@@ -14,6 +14,21 @@ public class Dog : MonoBehaviour
 
     Vector3 wanderDestination;
     public float distanceToDestinationThreshold;
+
+
+    // Used for pathfinding when following player
+
+    /// <summary> Stores when player was last in line of sight </summary>
+    private float lastTimePlayerSeen;
+
+    /// <summary> Stores node player was in when last in line of sight </summary>
+    private Node lastNodePlayerSeen;
+
+    /// <summary> Stores time player last performed here command </summary>
+    private float lastHereCommandTime;
+
+    /// <summary> Stores node player was in when last in line of sight </summary>
+    private Node lastHereCallNode;
     private void Awake()
     {
         UpdateState(DogState.WANDERING);
@@ -21,6 +36,7 @@ public class Dog : MonoBehaviour
     void Update()
     {
         CheckForCommands();
+        UpdateIfCanSeePlayer();
 
         switch (state)
         {
@@ -53,6 +69,19 @@ public class Dog : MonoBehaviour
         }
 
     }
+
+    private void UpdateIfCanSeePlayer()
+    {
+        if (!CanSeePlayer())
+            return;
+
+
+    }
+    private bool CanSeePlayer()
+    {
+        return gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject);
+    }
+
     public void UpdateState(DogState _state)
     {
         Debug.Log($"State changes from {state} to {_state}");
@@ -76,13 +105,23 @@ public class Dog : MonoBehaviour
 
     public void Follow(Vector3 _position)
     {
-        // Rotate towards position
+        Debug.Log("Following player");
+        // Check if player is currently in line of sight
+        if (gameObject.GetComponent<AISensor>().IsInSight(Player.Instance.gameObject))
+        {
+            Debug.Log("Can see player");
+        }
+        else
+            Debug.Log("Cant see player");
+
+
+        /*// Rotate towards position
         gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation,
             Quaternion.LookRotation(_position - transform.position),
             rotationSpeed * Time.deltaTime);
 
         // Move towards player
-        gameObject.transform.position += transform.forward * speed * Time.deltaTime;
+        gameObject.transform.position += transform.forward * speed * Time.deltaTime;*/
     }
     public void Wander()
     {
@@ -146,6 +185,8 @@ public class Dog : MonoBehaviour
             OnComeBy();
         else if (PlayerCommands.AwayCommandGiven)
             OnAway();
+        else if (PlayerCommands.HereCommandGiven)
+            OnHere();
     }
     public void OnComeBy()
     {
@@ -166,6 +207,11 @@ public class Dog : MonoBehaviour
     {
         UpdateCommandTime();
         UpdateState(DogState.SIT);
+    }
+    public void OnHere()
+    {
+        UpdateCommandTime();
+        UpdateState(DogState.FOLLOWING);
     }
 
     private void OnDrawGizmos()
