@@ -45,4 +45,14 @@ public class Utilities: MonoBehaviour
 
         return randomNode.worldPosition;
     }
+
+    /// <summary>
+    /// Returns true for given percent of times
+    /// </summary>
+    /// <param name="_percent">Percent chance of success</param>
+    /// <returns></returns>
+    public static bool GetSuccessInPercentChance(float _percent)
+    {
+        return Random.Range(0, 100) < _percent;
+    }
 }
