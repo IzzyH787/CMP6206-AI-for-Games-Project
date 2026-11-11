@@ -3,22 +3,23 @@ using UnityEngine;
 public class BirdFlockEntity : MonoBehaviour
 {
     [Header("Personal Values")]
+    private float _speed;
     public float speed {
-        get { return speed; }
+        get { return _speed; }
         set
         {
-            speed = value;
-            CapSpeed(); // If speed exceeds max range, set to random valid value
+            _speed = Mathf.Min(value, maxSpeed);
         }
     }
-    public float rotatonSpeed = 3f;
+    public float rotatonSpeed = 30f;
     bool turning = true;
 
     [Header("Set Values")]
     float neighbourDistance = 10f;
     float distanceAwayWithoutSeparation = 6f;
-    public float minSpeed = 0.5f;
-    public float maxSpeed = 3f;
+
+    public float minSpeed = 10f;
+    public float maxSpeed = 50f;
 
     GameObject player;
     Vector3 playerPosition;
@@ -57,7 +58,7 @@ public class BirdFlockEntity : MonoBehaviour
         {
             // Ignore itself in array
             if (_bird == gameObject)
-                return;
+                continue; 
 
             // Get dist between this brid and other bird
             distance = Vector3.Distance(_bird.transform.position, gameObject.transform.position);
@@ -110,14 +111,6 @@ public class BirdFlockEntity : MonoBehaviour
         {
             Vector3 direction = (playerPosition + new Vector3(0, Random.Range(BirdGlobalFlock.minHeight, BirdGlobalFlock.airSize))) - transform.position;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotatonSpeed * Time.deltaTime);
-            speed = Random.Range(minSpeed, maxSpeed);
-        }
-    }
-
-    public void CapSpeed()
-    {
-        if (speed > maxSpeed)
-        {
             speed = Random.Range(minSpeed, maxSpeed);
         }
     }

@@ -5,16 +5,15 @@ public class BirdGlobalFlock : MonoBehaviour
     [Header("Set Values")]
     public static int airSize = 30;
     public static float minHeight = 10f;
-    static int numBirds = 700;
+    static int numBirds = 100;
 
     [Header("Scene Values")]
-    public static Vector3 goalPosition = new Vector3(0, 0, 0);
-    public static GameObject[] birds = new GameObject[numBirds];
+    public static Vector3 goalPosition = Vector3.zero;
+    public static GameObject[] birds;
 
     [Header("Object References")]
     public GameObject birdPrefab;
-    GameObject player;
-    Vector3 playerPosition;
+
 
     void Start()
     {
@@ -24,12 +23,12 @@ public class BirdGlobalFlock : MonoBehaviour
 
     public void Init()
     {
-        player = Player.Instance.gameObject;
-        playerPosition = player.transform.position;
         goalPosition = RandomPositionInAir();
     }
     public void SpawnBirds()
     {
+        birds = new GameObject[numBirds];
+
         for (int i = 0; i < numBirds; i++)
         {
 
@@ -52,10 +51,11 @@ public class BirdGlobalFlock : MonoBehaviour
 
     public Vector3 RandomPositionInAir()
     {
+        Vector3 playerPosition = Player.Instance.gameObject.transform.position;
         return new Vector3(
             Random.Range(playerPosition.x - airSize, playerPosition.x + airSize),
             Random.Range(playerPosition.y + minHeight, playerPosition.y + airSize),
-            Random.Range(playerPosition.x - airSize, playerPosition.z + airSize)
+            Random.Range(playerPosition.z - airSize, playerPosition.z + airSize)
             );
     }
 }
