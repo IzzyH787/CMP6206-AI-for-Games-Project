@@ -14,7 +14,7 @@ A farm scene where the player can interact with growing plants and animals that 
     - Fleeing - response to being in navigatable range of wolf
     - Dying - response ot being attacked by wolf
     - Guided - movement dictated by interaction with sheepog
-  - Implementation method: Needs researching
+  - Implementation method: Behaviour Tree
 
 ![Sheep State Plan](Docs/sheep-states.jpg)
 
@@ -25,7 +25,7 @@ A farm scene where the player can interact with growing plants and animals that 
     - Attacking - when sheep is in range
     - Eating - when in range of dead sheep
     - Fleeing - if in range of player while holding gun
-  - Implementation method: Needs researching
+  - Implementation method: GOAP: Goal is to eat all sheep, using behaviour tree
 
 ![Wolf State Plan](Docs/wolf-states.jpg)
 
@@ -38,7 +38,7 @@ A farm scene where the player can interact with growing plants and animals that 
       - "Sit" - stop moving
       - "Walk up" - walk towards flock
     - Sleeping - if not interacted with by player for certain time, while sleep somewhere in scene
-  - Implementation: Needs researching
+  - Implementation: FSM
 
 ![Sheepdog State Plan](Docs/dog-states.jpg)
 
@@ -48,7 +48,7 @@ A farm scene where the player can interact with growing plants and animals that 
     - Eating crops - will be triggered as birds hunger stat decreases over time
     - Returning to sky: once bird completes eating acyion, hunger stat will be replenished and bird will return to the sky
     - Fleeing: if bird flies down to eat crops and is within range/ line of sight of scarecrow/player they will fly away
-  - Implementation method: Needs researching
+  - Implementation method: Boids & FSM
 
 ![Bird State Plan](Docs/bird-states.jpg)
 
@@ -57,7 +57,7 @@ A farm scene where the player can interact with growing plants and animals that 
     - Growing: main state of crops in state
     - Eaten: if crow successfully eats crop object, crop will lose height
     - Dying: if player has not watered crop for certain time, crop will enter dying state and start losing height
-  - Implementation method: Needs researching
+  - Implementation method: FSM
 
 ![Crop State Plan](Docs/crop-states.jpg)
 
@@ -67,17 +67,40 @@ Unity (appropriate .gitignore included)
 
 ## Research
 
+### Sheepdog Behaviour
+
+Common commands:
+
+- "Come By": move clockwise around flock
+- "Away" - move anticlockwise around flock
+- "Sit" - stop moving
+- "Walk up" - walk towards flock
+
+### Sheep Behaviour
+
 ## Methodology / Planning
 
 ### Development
 
-This project's timeline is being planned across two Kanban boards. I am using one in Notion to track for generic topics listed in the assessment brief that I want to look into throughout the semester. I am then also using a Github Project board for more detailed breakdowns of features I have decided and planned to work on following the general topics set out in my Notion board. This will define specifics for the implementations of features and the timeline in which I expect to complete them within.
+This project's timeline is being planned across two documents. I am using a Word document to track the general topics listed in the assessment brief that I want to look into throughout the semester and a table to plan out the broad timeline of when I aim to compete each feature. As I work through these features, I will then breakdown these features into smaller subtasks on a Notion kanban board to work through. This will define specifics for the implementations of each feature and the timeline in which I expect to complete them within.
 
 ### Quality Assurance
 
+#### Linting
+
+To ensure code standards are consistent across project (currently researching which tools to use).
+
+#### Unit Testing
+
+Will be set up with **Unity Test Runner** to test individual parts of logic from agents in specifically set up scenes *(e.g set scenarios to test dog's pathfinding in different conditions: player starts in sight, player starts out of sight, player is lost during pathfinding, player is unreachable player is out of bounds etc. )*
+
+#### Playtesting
+
+Having other people play in the scene and gain external feedback on the feel from th agents' behaviours to get next steps for further refinements.
+
 ### Progress Documentation
 
-This will be documented in my Github commits to track what was completed in each commit, anycurrent issues with the implementation and what date this was completed on. My Github project board will also be updated with the progress from these commmits and if any features are completed before/after the expected time in the initial plan.
+This will be documented in my Github commits to track what was completed in each commit, any current issues with the implementation and what date this was completed on. My Notion Kanban will also be updated with the progress from these commmits and if any features are completed before/after the expected time in the initial plan.
 
 ## References
 
