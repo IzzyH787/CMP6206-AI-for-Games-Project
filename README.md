@@ -116,6 +116,7 @@ This will be documented in my Github commits to track what was completed in each
 - [Line of Sight](https://www.youtube.com/watch?v=znZXmmyBF-o&themeRefresh=1)
 - [A* Pathfinding Series](https://www.youtube.com/watch?v=3Dw5d7PlcTM)
 - [Unity NavMesh Series](https://www.youtube.com/watch?v=SMWxCpLvrcc&list=PLX2vGYjWbI0SsXFD1Gjo-8kFEpzk5k4Kh&index=1)
+- [Sheep Flocking Devlog](https://www.youtube.com/watch?v=INgI2RMwhFc)
 
 ### Research Resources
 
@@ -123,3 +124,4 @@ This will be documented in my Github commits to track what was completed in each
   - [Sheepdog Commands & Tools](https://www.banhamsheepdogs.co.uk/sheepdog-commands-tools/)
   - [Livestock Behaviour & Safety](https://www.banhamsheepdogs.co.uk/livestock-behaviour-and-safety/)
 - [Sheep101](https://www.sheep101.info/flocking.html)
+- [Sheep Flocking Paper](https://www.diva-portal.org/smash/get/diva2:675990/FULLTEXT01.pdf)
