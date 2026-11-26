@@ -2,19 +2,25 @@ using UnityEngine;
 
 public class SheepFlockManager : MonoBehaviour
 {
+    public static SheepFlockManager Instance; 
+
     [Header("Set Values")]
 
-    static int numSheep = 700;
+    static int numSheep = 46;
     public Transform minBounds;
     public Transform maxBounds;
 
     [Header("Scene Values")]
-    public static GameObject[] sheep;
+    public GameObject[] sheepInScene;
 
     [Header("Object References")]
     public GameObject sheepPrefab;
+    public GameObject predator; // TO DO: Add support for multiple predators in scene
 
-
+    private void Awake()
+    {
+        Instance = this;
+    }
     void Start()
     {
         SpawnSheep();
@@ -22,13 +28,13 @@ public class SheepFlockManager : MonoBehaviour
 
     public void SpawnSheep()
     {
-        sheep = new GameObject[numSheep];
+        sheepInScene = new GameObject[numSheep];
 
         for (int i = 0; i < numSheep; i++)
         {
 
-            // Spawn bird
-            sheep[i] = (GameObject)Instantiate(
+            // Spawn sheep
+            sheepInScene[i] = (GameObject)Instantiate(
                 sheepPrefab,
                 RandomPositionInField(),
                 Quaternion.LookRotation(new Vector3(Random.Range(-1, 1), 0, Random.Range(-1, 1))));
@@ -39,7 +45,7 @@ public class SheepFlockManager : MonoBehaviour
     {
         return new Vector3(
             Random.Range(minBounds.position.x, maxBounds.position.x),
-            Random.Range(minBounds.position.y, maxBounds.position.y),
+            0,
             Random.Range(minBounds.position.z, maxBounds.position.z)
             );
     }

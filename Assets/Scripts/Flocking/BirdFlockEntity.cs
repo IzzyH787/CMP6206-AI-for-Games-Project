@@ -18,8 +18,8 @@ public class BirdFlockEntity : MonoBehaviour
     float neighbourDistance = 10f;
     float distanceAwayWithoutSeparation = 6f;
 
-    public float minSpeed = 3f;
-    public float maxSpeed = 10f;
+    public float minSpeed = 1f;
+    public float maxSpeed = 4f;
     public float speedVariation = 0.5f;
 
     private void Start()

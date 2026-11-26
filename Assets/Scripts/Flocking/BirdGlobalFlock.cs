@@ -4,7 +4,7 @@ public class BirdGlobalFlock : MonoBehaviour
 {
     [Header("Set Values")]
     public static int airSize = 30;
-    public static float minHeight = 10f;
+    public static float minHeight = 20f;
     static int numBirds = 700;
 
     [Header("Scene Values")]
