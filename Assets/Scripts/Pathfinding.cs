@@ -82,4 +82,24 @@ public class Pathfinding : MonoBehaviour
         // Will move digagonally sideways then straight vertically
         return (14 * distanceX) + (10 * (distanceY -  distanceX));
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="_centrePos"></param>
+    /// <param name="_radius"></param>
+    /// <param name="_startPos"></param>
+    /// <param name="_angleSteps">If circular path was created about centre how many way points would be used</param>
+    public void CreateCurvePathAboutPoint(Vector3 _centrePos, Vector3 _startPos, float _radius = 10, float _angleStep = 45, bool _clockwise = true)
+    {
+        Vector3 centreToStartDir = _startPos - _centrePos;
+        float startAngle =Vector3.Angle(Vector3.forward, centreToStartDir); // angle in degrees
+
+
+        float nextAngle = _clockwise ? startAngle + _angleStep: startAngle - _angleStep;
+
+        Vector3 nextWayPointPos = new Vector3(_radius * Mathf.Cos(nextAngle), 0, _radius * Mathf.Sin(nextAngle));
+
+        FindPath(_startPos, nextWayPointPos);
+    }
 }

@@ -3,7 +3,7 @@ using UnityEngine;
 public class BirdGlobalFlock : MonoBehaviour
 {
     [Header("Set Values")]
-    public static int airSize = 30;
+    public static int airSize = 100;
     public static float minHeight = 20f;
     static int numBirds = 700;
 

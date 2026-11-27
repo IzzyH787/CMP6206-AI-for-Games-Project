@@ -49,4 +49,20 @@ public class SheepFlockManager : MonoBehaviour
             Random.Range(minBounds.position.z, maxBounds.position.z)
             );
     }
+
+    public Vector3 CentreOfFlock()
+    {
+        Vector3 centre = Vector3.zero;
+        int groupSize = 0;
+        foreach (GameObject _sheep in sheepInScene)
+        {
+            centre += _sheep.transform.position;
+            groupSize++;
+        }
+        if (groupSize == 0)
+            return Vector3.zero;
+
+        centre /= groupSize;
+        return centre;
+    }
 }

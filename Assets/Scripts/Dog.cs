@@ -4,20 +4,32 @@ using UnityEngine;
 
 public class Dog : MonoBehaviour
 {
+    [Header("General")]
     // Default facing +x axis 
     private DogState state;
     Pathfinding pathfindingComponent;
 
-    [SerializeField] private float distanceBehindPlayer = 2.0f;
+    [Header("Movement")]
     [SerializeField] private float rotationSpeed = 2.0f;
     [SerializeField] private float speed = 3.0f;
 
+    [Header("Following Behaviour")]
+    [SerializeField] private float distanceBehindPlayer = 2.0f;
+
+    [Header("Commands")]
     private float lastCommandTime = 0.0f;
     [SerializeField] private float commandDuration = 30.0f;
     [SerializeField] private float idleTimeUntilSleep = 1000.0f;
 
+    [Header("Wandering Behaviour")]
     Vector3 wanderDestination;
     [SerializeField] public float distanceToDestinationThreshold = 10.0f;
+
+    [Header("Circling Behvaiours")]
+    float circlingRadius= 20f;
+    float circlingRadiusMargin = 5f;
+    bool isApproachingCircle;
+    bool isCircling;
 
 
     // Used for pathfinding when following player
@@ -66,6 +78,8 @@ public class Dog : MonoBehaviour
                 Sit();
                 break;
             case DogState.WALK_UP:
+                isApproachingCircle = true;
+                isCircling = false;
                 WalkUp();
                 break;
             case DogState.COME_BY:
@@ -184,11 +198,27 @@ public class Dog : MonoBehaviour
     }
     public void Sit()
     {
-        // TO DO: Implement sleep behaviour
+        // TO DO: Implement sit behaviour
     }
     public void WalkUp()
     {
-        // TO DO: Implement walk up behaviour
+        // Find centre of all sheep
+        Vector3 centreOfFlock = SheepFlockManager.Instance.CentreOfFlock();
+
+        float distToCentre = Utilities.CalculateDistanceToPosition(gameObject, centreOfFlock);
+        // Check if close enough to circling radius from centre (not too far away AND not too close)
+        if (distToCentre <= circlingRadius && distToCentre > circlingRadius - circlingRadiusMargin)
+        {
+            Vector3 dirToRadius = (gameObject.transform.position - centreOfFlock).normalized;
+            Vector3 nearestPosOnRadius = centreOfFlock + (dirToRadius * circlingRadius);
+            pathfindingComponent.FindPathFromSelfToPosition(nearestPosOnRadius);
+        }
+        // Traverse towards centre of flock
+        else
+        {
+            pathfindingComponent.FindPathFromSelfToPosition(centreOfFlock);
+        }
+        Pathfind(); // Dog A* pathfind to necessary point
     }
     public void ComeBy()
     {

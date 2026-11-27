@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 public class Grid : MonoBehaviour
 {
+    public bool drawGizmos = true;
     public static Grid Instance; 
     public Transform Player;
 
@@ -100,6 +101,9 @@ public class Grid : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
+        if (!drawGizmos)
+            return;
+
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
 
         if (grid != null)

@@ -42,7 +42,7 @@ public class Sheep : MonoBehaviour
             rotationSpeed * Time.deltaTime);
 
         // Add a bit of random into sheep movement to make more natural
-        movement *= Random.RandomRange(0.8f, 1.2f);
+        movement *= Random.Range(0.8f, 1.2f);
         // Set velocity of sheep 
         rb.linearVelocity = new Vector3(movement.x, rb.linearVelocity.y, movement.z);
     }
